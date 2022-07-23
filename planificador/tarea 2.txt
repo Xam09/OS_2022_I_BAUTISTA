@@ -1,0 +1,48 @@
+select *from personas
+
+--1.- Muestre el mayor sueldo de las personas de sexo masculino
+
+select  max(sueldo) as sueldo_maximo from personas where sexo='M' 
+
+--2.- Muestre el menor sueldo de las personas que tiene el rol de ScrumMaster.
+
+select min(personas.sueldo) as minimo_sueldo from personas  inner join  roles on personas.id_rol=roles.id_rol  where roles.rol='ScrumMaster'
+
+--3.- Muestre el mayor sueldo de la persona que es del país de El Salvador y de sexo femenino.
+
+select  max(personas.sueldo) as mayor_sueldo from personas inner join  pais on personas.id_pais=pais.id_pais where pais.pais='El Salvador' and personas.sexo='F'
+
+--4.- Liste las personas que ganan un sueldo por debajo del promedio y que son del país de El Salvador.
+
+select nombre, sueldo, pais  from personas inner join  pais on  personas.id_pais=pais.id_pais where sueldo<( select(avg(personas.sueldo)) from personas) and pais.pais='El Salvador' 
+
+--5ta.- Calcule el monto total que se necesita para pagar el sueldo de las personas que tienen el rol de Team.
+
+select sum(sueldo) as monto_total from personas inner join roles on personas.id_rol=roles.id_rol where roles.rol='Team'
+
+--6ta.- Liste las personas que ganan un sueldo entre 700 y 1000, además que sea del país de El Salvador y sea masculino.
+
+select nombre,apellido from personas inner join pais on personas.id_pais=pais.id_pais where pais.pais='El Salvador' and (personas.sueldo between 700 and 1000) and personas.sexo='M'
+
+--7.- Liste las personas que han nacido en los años 1970,1980,1990
+
+select nombre,apellido,pais from personas inner join pais on personas.id_pais=pais.id_pais where (year (personas. nacimiento) in (1970,1980,1990))
+
+--8.- Liste las personas que han nacido entre los años 1970 y 1980, que tiene el rol de Team y es del país El Salvador.
+
+select  nombre, apellido,nacimiento from personas inner join roles on personas.id_rol=roles.id_rol inner join pais on personas.id_pais=pais.id_pais
+where  (year (personas.nacimiento) between 1970 and 1980) and pais.pais='El Salvador ' and roles.rol='Team'  
+
+--9.- Liste la persona que tiene el mayor sueldo y que es del país de El Salvador y tiene el rol de ScrumMaster.
+
+select nombre, apellido  from personas inner join roles on personas.id_rol=roles.id_rol inner join pais on personas.id_pais=pais.id_pais 
+where sueldo=(select max(sueldo)from personas) and pais.pais='El Salvador'and roles.rol='ScrumMaster'
+
+
+
+
+--10.- Liste el promedio de sueldos por roles y que son del país de El Salvador
+Realice combinaciones de varios operadores y sentencias.
+
+select rol, avg(sueldo) as promedio from personas inner join roles on personas.id_rol=roles.id_rol inner join pais on personas.id_pais=pais.id_pais 
+where pais.pais='El Salvador' group by roles.rol
